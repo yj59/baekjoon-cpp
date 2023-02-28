@@ -1,6 +1,6 @@
 # 🐣 백준 문제 풀이
 
-[![Solved.ac 프로필](http://mazassumnida.wtf/api/generate_badge?boj=a59)](https://solved.ac/a59)
+[![Solved.ac 프로필](http://mazassumnida.wtf/api/v2/generate_badge?boj=a59)](https://solved.ac/a59)
 
 백준 문제 풀이 소스코드를 업로드합니다.
 
