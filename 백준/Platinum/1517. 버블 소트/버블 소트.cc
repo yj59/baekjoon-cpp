@@ -1,25 +1,29 @@
 #include <stdio.h>
+#include <iostream>
+#include <vector>
+using namespace std;
 int list[500000];
-int tmp[500000];
+long long cnt = 0;
 
 long long merge(int st, int e) {
     if (st == e) return 0;
 
+    vector<int> tmp;
     int m = (st + e) / 2;
-    long long cnt = merge(st, m) + merge(m + 1, e);
+    merge(st, m);
+    merge(m + 1, e);
 
     int left = st;
     int right = m + 1;
-    int index = 0;
     
     while (left <= m || right <= e) 
     {
         if (left <= m && (right > e || list[left] <= list[right]))
-            tmp[index++] = list[left++];
+            tmp.push_back(list[left++]);
         else
         {
             cnt += m - left + 1;
-            tmp[index++] = list[right++];
+            tmp.push_back(list[right++]);
         }
     }
 
