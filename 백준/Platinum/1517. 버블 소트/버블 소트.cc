@@ -18,7 +18,7 @@ long long merge(int st, int e) {
             tmp[index++] = list[left++];
         else
         {
-            cnt += (long long)(m - left + 1);
+            cnt += m - left + 1;
             tmp[index++] = list[right++];
         }
     }
@@ -32,7 +32,6 @@ long long merge(int st, int e) {
 int main() {
     int n;
     long long result;
-
     scanf("%d", &n);
     for (int i = 0; i < n; i++)
         scanf("%d", &list[i]);
