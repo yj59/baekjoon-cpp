@@ -1,10 +1,10 @@
 #include <stdio.h>
 int n;
-long long int A[1000000];
-long long int R[1000000];
+int A[1000000];
+int R[1000000];
 int main() {
 	scanf("%d", &n);
-	for (int i = 0; i < n; i++) scanf("%lld", &A[i]);
+	for (int i = 0; i < n; i++) scanf("%d", &A[i]);
 	int r = 0;
 
 	for (int i = 0; i < n; i++) 
