@@ -14,13 +14,13 @@ bool dfs(int cnt, string airport)
     
     if(cnt == tickets_.size()) return 1;
     
-    for(int i=0; i<tickets_.size(); i++)
+    for(int i = 0; i < tickets_.size(); i++)
     {
         if(visited[i]) continue;
         if(tickets_[i][0] != airport) continue;
         
         visited[i] = 1;
-        bool next = dfs(cnt+1, tickets_[i][1]);
+        bool next = dfs(cnt + 1, tickets_[i][1]);
         
         if(next)
         {
