@@ -16,7 +16,7 @@ int solution(vector<vector<int>> jobs)
     
     while(!jobs.empty())
     {
-        for(int i=0; i < jobs.size(); i++)
+        for(int i = 0; i < jobs.size(); i++)
         {
             if(jobs[i][0] <= timer)
             {
