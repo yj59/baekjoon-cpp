@@ -8,11 +8,14 @@ using namespace std;
 
 int cnt_notsame(string a, string b)
 {
-    int cnt=0;
-    for(int i=0; i<a.size(); i++)
+    int cnt = 0;
+    
+    for(int i = 0; i < a.size(); i++)
     {
-        if(a[i]!=b[i])
-            cnt++;
+        if(a[i] != b[i])
+        {
+             cnt++;
+        }
     }
     return cnt;
 }
@@ -25,20 +28,21 @@ int bfs(string begin, string target, vector<string> words)
     deq.push_back(make_pair(begin,0));
     visited.insert(begin);
     
-    while(deq.empty()!=1){
-        string str=deq.front().first;
-        int cnt=deq.front().second;
-        if(str==target)
-            return cnt;
-        
+    while(deq.empty()!=1)
+    {
+        string str = deq.front().first;
+        int cnt = deq.front().second;
+
+        if(str == target) return cnt;
+
         deq.pop_front();
-        
+
         for(int i=0; i<words.size(); i++)
         {
-            if(visited.find(words[i])!=visited.end())
+            if(visited.find(words[i]) != visited.end())
                 continue;
             
-            if(cnt_notsame(str,words[i])!=1)
+            if(cnt_notsame(str,words[i]) != 1)
                 continue;
             
             visited.insert(words[i]);
