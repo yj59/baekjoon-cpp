@@ -1,64 +1,55 @@
+#include <iostream>
 #include <string>
 #include <vector>
-#include <queue>
-#include <algorithm>
-#define MAX 50
+#include <set>
+#include <deque>
 
 using namespace std;
 
-int answer = MAX + 1;
-bool visited[MAX];
-queue<pair<string, int>> q;
-
-bool compareWords(string begin, string word) 
+int cnt_notsame(string a, string b)
 {
-    int cnt = 0;
-    
-    for (int i=0; i<word.length(); i++) {
-        if (begin[i] == word[i]) {
-            cnt += 1;        
-        }
+    int cnt=0;
+    for(int i=0; i<a.size(); i++)
+    {
+        if(a[i]!=b[i])
+            cnt++;
     }
-    
-    if (cnt == word.length() - 1) return true;
-    return false;
+    return cnt;
 }
 
-void bfs(string begin, string target, vector<string> &words) 
+int bfs(string begin, string target, vector<string> words)
 {
-    int len = words.size();
-    q.push({begin, 0});
+    set <string> visited;
+    deque<pair<string,int>>deq;
     
-    while (!q.empty()) 
-    {
-        string word = q.front().first;
-        int level = q.front().second;
-        q.pop();
+    deq.push_back(make_pair(begin,0));
+    visited.insert(begin);
+    
+    while(deq.empty()!=1){
+        string str=deq.front().first;
+        int cnt=deq.front().second;
+        if(str==target)
+            return cnt;
         
-        if (word == target) 
-        {
-            answer = min(answer, level);
-        }
+        deq.pop_front();
         
-        for (int i=0; i<len; i++) 
+        for(int i=0; i<words.size(); i++)
         {
-            bool isOk = compareWords(word, words[i]);
-            if (visited[i] || !isOk) continue;
+            if(visited.find(words[i])!=visited.end())
+                continue;
             
-            q.push({words[i], level + 1});
-            visited[i] = true;
+            if(cnt_notsame(str,words[i])!=1)
+                continue;
+            
+            visited.insert(words[i]);
+            deq.push_back(make_pair(words[i],cnt+1));
         }
     }
+    return 0;
 }
 
 int solution(string begin, string target, vector<string> words) 
 {
-    vector<string>::iterator iter;
-    iter = find(words.begin(), words.end(), target);
-
-    if (iter == words.end()) return 0;
-    
-    bfs(begin, target, words);
-    
+    int answer = bfs(begin,target,words);
     return answer;
 }
