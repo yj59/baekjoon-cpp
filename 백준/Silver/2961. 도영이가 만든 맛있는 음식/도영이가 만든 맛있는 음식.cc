@@ -1,45 +1,49 @@
 #include <iostream>
+#include <vector>
+#include <climits>
 #include <cmath>
 using namespace std;
 
-int min_diff(int n, int arr[][2])
-{
-	// bitmask
-	int cal = 1000000000;
+vector<pair<int, int>> v;
 
+long long bitmask(int n)
+{
+	long long ans = LLONG_MAX;
 	for (int i = 1; i < (1 << n); i++)
 	{
-		int mul = 1;
-		int sum = 0;
+		long long mul = 1;
+		long long sum = 0;
+
 		for (int j = 0; j < n; j++)
 		{
-			if (i & 1 << j)
+			if (i & (1 << j))
 			{
-				mul *= arr[j][0];
-				sum += arr[j][1];
+				mul *= v[j].first;
+				sum += v[j].second;
 			}
 		}
-		cal = min(cal, abs(mul - sum));
+
+		ans = min(ans, abs(sum - mul));
 	}
 
-	return cal;
+	return ans;
 }
+
 int main()
 {
-	ios::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 
 	// init & input
 	int n;
-	int arr[10][2];
-    
 	cin >> n;
 	for (int i = 0; i < n; i++)
 	{
-		cin >> arr[i][0] >> arr[i][1];
+		int f, s;
+		cin >> f >> s;
+		v.push_back({ f, s });
 	}
 
-	// output
-	cout << min_diff(n, arr);
+	cout << bitmask(n);
 	return 0;
 }
