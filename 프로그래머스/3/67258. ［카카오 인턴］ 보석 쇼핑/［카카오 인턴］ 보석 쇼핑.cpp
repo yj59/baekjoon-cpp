@@ -38,6 +38,7 @@ vector<int> solution(vector<string> gems) {
             }
             if(end == gems.size()) break;
         }
+        
         if(Min > end - start)
         {
             answer[0] = start + 1;
