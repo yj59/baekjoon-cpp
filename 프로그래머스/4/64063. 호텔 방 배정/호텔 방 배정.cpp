@@ -4,22 +4,23 @@
 
 using namespace std;
 
-unordered_map<long long, long long> rooms;
-long long Find(long long num)
+unordered_map<long long, long long> um;
+long long Find(long long n)
 {
-    if (rooms[num] == 0) return num;
-    return rooms[num] = Find(rooms[num]);
+    if (um[n] == 0) return n;
+    return um[n] = Find(um[n]);
 }
 
 vector<long long> solution(long long k, vector<long long> room_number) 
 {
     vector<long long> answer;
 
-    for (auto num : room_number) 
+    for (long long n : room_number) 
     {
-        long long r = Find(num);
-        answer.push_back(r);
-        rooms[r] = r + 1;
+        long long room = Find(n);
+        answer.push_back(room);
+        um[room] = room + 1;
     }
+    
     return answer;
 }
