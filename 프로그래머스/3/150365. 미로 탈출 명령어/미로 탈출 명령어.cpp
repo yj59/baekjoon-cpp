@@ -4,7 +4,7 @@
 #include <iostream>
  
 using namespace std;
- 
+
 string answer = "impossible";
 bool isArrived = false;
 int limit = 0;
