@@ -1,19 +1,30 @@
 #include <iostream>
-#include <algorithm>
-#define MAX 1000001
 using namespace std;
-int d[MAX];
-int n, i, j, c;
+
+bool visited[1000001];
+int memo[1000001];
+
+void recur(int n, int cnt)
+{
+	if (visited[n] && memo[n] < cnt) return;
+
+	visited[n] = 1;
+	memo[n] = cnt;
+
+	if (n == 1) return;
+
+	if (n % 3 == 0) recur(n / 3, cnt + 1);
+	if (n % 2 == 0) recur(n / 2, cnt + 1);
+	recur(n - 1, cnt + 1);
+}
+
 int main()
 {
-	d[0] = 0; d[1] = 0;
-	scanf("%d", &n);
-	for (int i = 2; i <= n; i++)
-	{
-		d[i] = d[i - 1] + 1;
-		if (i % 2 == 0) d[i] = min(d[i], d[i / 2] + 1);
-		if (i % 3 == 0) d[i] = min(d[i], d[i / 3] + 1);
-	}
-	printf("%d", d[n]);
+	int n;
+	cin >> n;
+
+	recur(n, 0);
+	cout << memo[1];
+
 	return 0;
 }
