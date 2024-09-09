@@ -1,73 +1,60 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-
 using namespace std;
+#define INF 1e9
 
-vector<pair<int, int>>graph[20001];
-int cost[20001];
+vector<pair<int, int>> graph[20001];
+int sumOfTheCosts[20001];
 
-void dijkstra(int st)
+void dijkstra(int start)
 {
-	priority_queue<pair<int, int>>pq;
-	pq.push({ 0, st });
-	cost[st] = 0;
+	priority_queue<pair<int, int>> pq;
+	pq.push(make_pair(0, start));
+	sumOfTheCosts[start] = 0;
 
 	while (!pq.empty())
 	{
-		int dist = -pq.top().first; // 우선순위큐: 내림차순 정렬
-		int now = pq.top().second;
+		int cost = -pq.top().first;
+		int node = pq.top().second;
 		pq.pop();
 
-		if (cost[now] < dist) continue;
+		if (cost > sumOfTheCosts[node]) continue;
 
-		for (int i = 0; i < graph[now].size(); i++)
+		for (int i = 0; i < graph[node].size(); i++)
 		{
-			int cal = dist + graph[now][i].second;
-			int targetNode = graph[now][i].first;
+			int calc = cost + graph[node][i].second;
 
-			if (cal < cost[targetNode])
+			if (calc < sumOfTheCosts[graph[node][i].first])
 			{
-				cost[targetNode] = cal;
-				pq.push(make_pair(-cal, targetNode));
+				sumOfTheCosts[graph[node][i].first] = calc;
+				pq.push(make_pair(-calc, graph[node][i].first));
 			}
 		}
 	}
+	return;
 }
 
 int main()
 {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL); cout.tie(NULL);
+	int vertex, edge, st;
+	cin >> vertex >> edge >> st;
 
-	// input & init
-	int V, E, K;
-	cin >> V >> E >> K;
-
-	for (int i = 0; i < E; i++)
+	for (int i = 0; i < edge; i++)
 	{
 		int u, v, w;
 		cin >> u >> v >> w;
-
 		graph[u].push_back({ v, w });
 	}
 
-	fill(cost, cost + 20001, 1e9);
+	fill(sumOfTheCosts, sumOfTheCosts + 20001, INF);
 
-	// dijkstra algorithm
-	dijkstra(K);
+	dijkstra(st);
 
-	// output
-	for (int i = 1; i <= V; i++)
+	for (int i = 1; i <= vertex; i++)
 	{
-		if (cost[i] == 1e9)
-		{
-			cout << "INF\n";
-		}
-		else
-		{
-			cout << cost[i] << "\n";
-		}
+		if (sumOfTheCosts[i] < INF) cout << sumOfTheCosts[i] << "\n";
+		else cout << "INF\n";
 	}
 
 	return 0;
