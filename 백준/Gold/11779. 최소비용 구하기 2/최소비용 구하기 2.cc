@@ -5,7 +5,8 @@
 using namespace std;
 
 int dist[1001];
-vector<int> route[1001];
+int route[1001];
+vector<int> ans;
 
 void dijkstra(int st, vector<pair<int, int>>graph[])
 {
@@ -14,7 +15,6 @@ void dijkstra(int st, vector<pair<int, int>>graph[])
 	priority_queue<pair<int, int>> pq;
 	pq.push({ 0, st });
 	dist[st] = 0;
-	route[st].push_back(st);
 
 	while (!pq.empty())
 	{
@@ -32,14 +32,9 @@ void dijkstra(int st, vector<pair<int, int>>graph[])
 			if (dist[next] > calc)
 			{	
 				dist[next] = calc;
+				route[next] = cur;
+				
 				pq.push(make_pair(-calc, next));
-
-				route[next].clear();
-				for (int i = 0; i < route[cur].size(); i++)
-				{
-					route[next].push_back(route[cur][i]);
-				}
-				route[next].push_back(next);
 			}
 		}
 	}
@@ -70,10 +65,16 @@ int main()
 	dijkstra(st, graph);
 
 	// output
-	cout << dist[e] << "\n" << route[e].size() << "\n";
-	for (int i = 0; i < route[e].size(); i++)
+	int idx = e;
+	while (idx)
 	{
-		cout << route[e][i] << " ";
+		ans.push_back(idx);
+		idx = route[idx];
+	}
+	cout << dist[e] << "\n" << ans.size() << "\n";
+	for (int i = ans.size() - 1; i >= 0; i--)
+	{
+		cout << ans[i] << " ";
 	}
 
 	return 0;
