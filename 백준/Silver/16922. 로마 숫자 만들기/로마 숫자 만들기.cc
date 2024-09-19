@@ -4,8 +4,8 @@ using namespace std;
 
 int solve(int n)
 {
-    set<int> s;
-    
+	bool check[1001] = { 0, };
+
 	for (int i = 0; i <= n; i++)
 	{
 		for (int j = 0; j <= n - i; j++)
@@ -14,11 +14,17 @@ int solve(int n)
 			{
 				int l = n - i - j - k;
 				int calc = i + j * 5 + k * 10 + l * 50;
-				s.insert(calc);
+				check[calc] = 1;
 			}
 		}
 	}
-	return s.size();
+
+	int ans = 0;
+	for (int i = 0; i < 1001; i++)
+	{
+		if (check[i]) ans++;
+	}
+	return ans;
 }
 
 int main()
