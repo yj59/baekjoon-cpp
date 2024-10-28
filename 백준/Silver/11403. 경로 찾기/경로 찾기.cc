@@ -1,47 +1,41 @@
 #include <iostream>
-#include <vector>
 
-int d[100][100];
+int graph[101][101];
 
-int main() 
+int main()
 {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(0); std::cout.tie(0);
+	// init & input
+	int n;
+	std::cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			std::cin >> graph[i][j];
+		}
+	}
 
-    int n;
+	// floyd-warshall
+	for (int k = 0; k < n; k++)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (graph[i][k] && graph[k][j]) graph[i][j] = 1;
+			}
+		}
+	}
 
-    scanf("%d", &n);
+	// output
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			std::cout << graph[i][j] << " ";
+		}
+		std::cout << "\n";
+	}
 
-    for (int i = 0; i < n; i++) 
-    {
-        for (int j = 0; j < n; j++) 
-        {
-            scanf("%d", &d[i][j]);
-        }
-    }
-
-    for (int k = 0; k < n; k++) 
-    {
-        for (int i = 0; i < n; i++) 
-        {
-            for (int j = 0; j < n; j++) 
-            {
-                if (d[i][k] == 1 && d[k][j] == 1) 
-                {
-                    d[i][j] = 1;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < n; i++) 
-    {
-        for (int j = 0; j < n; j++) 
-        {
-            printf("%d ", d[i][j]);
-        }
-        printf("\n");
-    }
-
-    return 0;
+	return 0;
 }
