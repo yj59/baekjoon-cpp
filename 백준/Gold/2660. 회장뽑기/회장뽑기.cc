@@ -1,44 +1,5 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
-
-int fw[51][51];
-vector<int> v;
-
-int floydWarshall(int n)
-{
-	for (int k = 1; k <= n; k++)
-	{
-		for (int i = 1; i <= n; i++)
-		{
-			for (int j = 1; j <= n; j++)
-			{
-				fw[i][j] = min(fw[i][k] + fw[k][j], fw[i][j]);
-			}
-		}
-	}
-
-	int res = 1e9;
-	for (int i = 1; i <= n; i++)
-	{
-		int score = 0;
-		for (int j = 1; j <= n; j++)
-		{
-			score = max(score, fw[i][j]);
-		}
-
-		if (score > res) continue;
-		else if (score < res)
-		{
-			res = score;
-			v.clear();
-		}
-		v.push_back(i);
-	}
-
-	return res;
-}
 
 int main()
 {
@@ -46,31 +7,62 @@ int main()
 	cin.tie(NULL); cout.tie(NULL);
 
 	// input & init
+	int fw[51][51];
+	int ans[51];
 	int n;
 	cin >> n;
 
 	fill(&fw[0][0], &fw[n][n + 1], 1e9);
-	for (int i = 0; i <= n; i++)
-	{
-		fw[i][i] = 0;
-	}
 
-	while(1)
+	while (1)
 	{
 		int a, b;
 		cin >> a >> b;
 
-		if (a == -1 && b == -1) break;
+		if (a == -1) break;
 
 		fw[a][b] = 1;
 		fw[b][a] = 1;
 	}
 
-	// solve
-	cout << floydWarshall(n) << " " << v.size() << "\n";
-	for (int i = 0; i < v.size(); i++)
+	// floyd-warshall
+	for (int k = 1; k <= n; k++)
 	{
-		cout << v[i] << " ";
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= n; j++)
+			{
+				if (i == j) continue;
+				fw[i][j] = min(fw[i][k] + fw[k][j], fw[i][j]);
+			}
+		}
+	}
+
+	int res = 1e9;
+	int idx = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		int score = 0;
+		for (int j = 1; j <= n; j++)
+		{
+			if (i == j) continue;
+			score = max(score, fw[i][j]);
+		}
+
+		if (score > res) continue;
+		else if (score < res)
+		{
+			res = score;
+			idx = 0;
+		}
+		ans[idx++] = i;
+	}
+
+	// output
+	cout << res << " " << idx << "\n";
+	for (int i = 0; i < idx; i++)
+	{
+		cout << ans[i] << " ";
 	}
 
 	return 0;
