@@ -14,11 +14,7 @@ int floydWarshall(int n)
 		{
 			for (int j = 1; j <= n; j++)
 			{
-				if (i == k || k == j) continue;
-				if (fw[i][k] + fw[k][j] < fw[i][j]) 
-				{
-					fw[i][j] = fw[i][k] + fw[k][j];
-				}
+				fw[i][j] = min(fw[i][k] + fw[k][j], fw[i][j]);
 			}
 		}
 	}
@@ -31,16 +27,14 @@ int floydWarshall(int n)
 		{
 			score = max(score, fw[i][j]);
 		}
-		if (score < res)
+
+		if (score > res) continue;
+		else if (score < res)
 		{
 			res = score;
 			v.clear();
-			v.push_back(i);
 		}
-		else if (score == res)
-		{
-			v.push_back(i);
-		}
+		v.push_back(i);
 	}
 
 	return res;
@@ -74,7 +68,6 @@ int main()
 
 	// solve
 	cout << floydWarshall(n) << " " << v.size() << "\n";
-
 	for (int i = 0; i < v.size(); i++)
 	{
 		cout << v[i] << " ";
