@@ -1,29 +1,37 @@
 #include <iostream>
 #include <algorithm>
+using namespace std;
+
+int a[10001];
+int dp[10001];
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
+	// input & init
 	int n, k;
-	int v[101];
+	cin >> n >> k;
 
-	scanf("%d %d", &n, &k);
-	int* dp = new int[k + 1];
-
-	for (int i = 1; i <= k; i++) dp[i] = 100001;
-	dp[0] = 0;
-
-	for (int i = 1; i <= n; i++) scanf("%d", &v[i]);
-	std::sort(v, v + n);
-
-	for (int i = 1; i <= k; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		for (int j = 1; j <= n; j++)
+		cin >> a[i];
+	}
+	fill(dp + 1, dp + k + 1, 1e9);
+
+	// solve
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = a[i]; j <= k; j++)
 		{
-			if ((v[j] <= i) && (dp[i - v[j]] < dp[i])) dp[i] = dp[i - v[j]] + 1;
+			dp[j] = min(dp[j], dp[j - a[i]] + 1);
 		}
 	}
 
-	if (dp[k] == 100001) printf("-1");
-	else printf("%d", dp[k]);
+	// output
+	if (dp[k] == 1e9) cout << -1;
+	else cout << dp[k];
+
 	return 0;
 }
