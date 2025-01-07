@@ -1,26 +1,37 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
-int main()
-{
-    int dp[1001][1001];
-    std::string a, b;
-    std::cin >> a >> b;
+using namespace std;
 
-    for (int i = 1; i <= a.length(); i++)
+int dp[1001];
+
+int main() 
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    string s1, s2;
+    cin >> s1 >> s2;
+
+    for (int i = 1; i <= s1.length(); i++)
     {
-        for (int j = 1; j <= b.length(); j++)
+        int prev = 0;
+        for (int j = 1; j <= s2.length(); j++)
         {
-            if (a[i - 1] == b[j - 1])
+            int temp = dp[j];
+
+            if (s1[i - 1] == s2[j - 1]) 
             {
-                dp[i][j] = dp[i - 1][j - 1] + 1;
+                dp[j] = prev + 1;
             }
-            else
+            else 
             {
-                dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+                dp[j] = max(dp[j], dp[j - 1]); 
             }
+
+            prev = temp;
         }
     }
-    std::cout << dp[a.length()][b.length()];
+
+    cout << dp[s2.length()];
     return 0;
 }
