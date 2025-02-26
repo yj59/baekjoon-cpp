@@ -1,67 +1,61 @@
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
 using namespace std;
 
-#define INF 1e9
-
+const int INF = 1e9;
 vector<pair<int, int>> graph[1001];
-int dist[1001];
 
-void dijkstra(int start)
+int dijkstra(int n, int st, int e)
 {
-	// 거리, 노드
+	vector<int> dist(n + 1, INF);
 	priority_queue<pair<int, int>> pq;
-	
-	pq.push({ 0, start });	// 첫번째 노드비용 초기화
-	dist[start] = 0;
+
+	dist[st] = 0;
+	pq.push({ 0, st });
 
 	while (!pq.empty())
 	{
-		int cost = -pq.top().first;	// 현재 노드까지의 비용(오름차순 정렬을 위해 음수 붙임)
-		int cur = pq.top().second;	// 현재 노드
+		int cur_cost = -pq.top().first;
+		int cur_node = pq.top().second;
 		pq.pop();
 
-		if (dist[cur] < cost) continue;
-		
-		for (int i = 0; i < graph[cur].size(); i++)
-		{
-			int calc = cost + graph[cur][i].second;
+		if (cur_cost > dist[cur_node]) continue;
 
-			// 현재 계산값 더 작다면 최소비용 갱신
-			if (calc < dist[graph[cur][i].first])
+		for (auto& nei : graph[cur_node])
+		{
+			int next_node = nei.first;
+			int next_cost = nei.second + cur_cost;
+
+			if (next_cost < dist[next_node])
 			{
-				dist[graph[cur][i].first] = calc;
-				pq.push(make_pair(-calc, graph[cur][i].first));
+				dist[next_node] = next_cost;
+				pq.push({ -next_cost, next_node });
 			}
 		}
 	}
 
-	return;
+	return dist[e];
 }
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+	cin.tie(NULL); cout.tie(NULL);
 
 	int n, m;
 	cin >> n >> m;
 
 	for (int i = 0; i < m; i++)
 	{
-		int st, e, cost;
-		cin >> st >> e >> cost;
-		graph[st].push_back({ e, cost });
+		int u, v, w;
+		cin >> u >> v >> w;
+		graph[u].push_back({ v, w });
 	}
 
 	int st, e;
 	cin >> st >> e;
 
-	fill(dist, dist + 1001, INF);
-
-	dijkstra(st);
-
-	cout << dist[e] << "\n";
+	cout << dijkstra(n, st, e);
 	return 0;
 }
