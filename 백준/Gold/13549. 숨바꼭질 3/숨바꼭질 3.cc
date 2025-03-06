@@ -3,61 +3,47 @@
 #include <queue>
 using namespace std;
 
-vector<pair<int, int>> graph[100001];
-int dp[100001];
-int dx[2] = { -1, 1 };
+bool visited[100001];
 
-int dijkstra(int st, int target)
+int solve(int n, int k)
 {
-	int next, ntime;
-
 	priority_queue<pair<int, int>> pq;
-	pq.push(make_pair(0, st));
-	dp[st] = 0;
+	pq.push({ 0, n });
 
 	while (!pq.empty())
 	{
-		int time = -pq.top().first;
-		int now = pq.top().second;
+		int cost = -pq.top().first;
+		int x = pq.top().second;
 		pq.pop();
+		visited[x] = true;
 
-		if (dp[now] < time) continue;
+		if (x == k) return cost;
 
-		for (int i = 0; i < 3; i++)
+		if (x * 2 < 100001 && !visited[x * 2])
 		{
-			if (i == 2)
-			{
-				next = 2 * now;
-				ntime = time;
-			}
-			else
-			{
-				next = now + dx[i];
-				ntime = time + 1;
-			}
-
-			if (next < 0 || next > 100000) continue;
-
-			if (dp[next] == -1 || dp[next] > ntime)
-			{
-				dp[next] = ntime;
-				pq.push(make_pair(-ntime, next));
-			}
+			pq.push({ -cost, x * 2 });
+		}
+		if (x + 1 < 100001 && !visited[x + 1])
+		{
+			pq.push({ -(cost + 1) , x + 1 });
+		}
+		if (x - 1 >= 0 && !visited[x - 1])
+		{
+			pq.push({ -(cost + 1), x - 1 });
 		}
 	}
 
-	return dp[target];
+	return -1;
 }
 
 int main()
 {
-	// input & init
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
 	int n, k;
 	cin >> n >> k;
 
-	fill(dp, dp + 100001, -1);
-
-	// dijkstra
-	cout << dijkstra(n, k);
+	cout << solve(n, k);
 	return 0;
 }
