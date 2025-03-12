@@ -1,12 +1,41 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 using namespace std;
 
-int arr[100001];
+int arr[100000];
+
+void solve(int n)
+{
+	int st = 0;
+	int e = n - 1;
+
+	int ans1 = 0;
+	int ans2 = 0;
+	int mi = 2000000000;
+
+	while (st < e)
+	{
+		int cal = arr[st] + arr[e];
+
+		if (abs(cal) < abs(mi))
+		{
+			mi = cal;
+			ans1 = arr[st];
+			ans2 = arr[e];
+		}
+
+		if (cal == 0) break;
+
+		if (cal < 0) st++;
+		else e--;
+	}
+
+	cout << ans1 << " " << ans2;
+}
 
 int main()
 {
-	ios::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
 
 	int n;
@@ -15,36 +44,7 @@ int main()
 	{
 		cin >> arr[i];
 	}
+	solve(n);
 
-	int l = 0;
-	int r = n - 1;
-
-	int min = 2000000001;
-	int ml = 0;
-	int mr = 0;
-
-	while (l < r)
-	{
-		int sum = arr[l] + arr[r];
-
-		if (abs(sum) < min)
-		{
-			min = abs(sum);
-			ml = arr[l];
-			mr = arr[r];
-
-			if (min == 0) break;
-		}
-		if (sum < 0)
-		{
-			l++;
-		}
-		else
-		{
-			r--;
-		}
-	}
-
-	cout << ml << " " << mr;
 	return 0;
 }
