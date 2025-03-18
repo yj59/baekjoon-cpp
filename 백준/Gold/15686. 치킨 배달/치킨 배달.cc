@@ -4,9 +4,7 @@
 using namespace std;
 
 vector<pair<int, int>> home, chicken;
-vector<vector<int>> dist;
 vector<int> selected;
-
 int result = 1e9;
 
 int getChickenStreet()
@@ -17,7 +15,8 @@ int getChickenStreet()
 		int comp = 1e9;
 		for (int j = 0; j < selected.size(); j++)
 		{
-			comp = min(comp, dist[i][selected[j]]);
+			int curChicken = selected[j];
+			comp = min(comp, abs(home[i].first - chicken[curChicken].first) + abs(home[i].second - chicken[curChicken].second));
 		}
 		sum += comp;
 	}
@@ -40,18 +39,6 @@ void getCombination(int idx, int cur, int m)
 		selected.pop_back();
 	}
 
-}
-
-void getDist()
-{
-	dist.resize(home.size(), vector<int>(chicken.size()));
-	for (int i = 0; i < home.size(); i++)
-	{
-		for (int j = 0; j < chicken.size(); j++)
-		{
-			dist[i][j] = abs(home[i].first - chicken[j].first) + abs(home[i].second - chicken[j].second);
-		}
-	}
 }
 
 int main()
@@ -79,8 +66,6 @@ int main()
 			}
 		}
 	}
-
-	getDist();
 
 	getCombination(0, 0, m);
 
