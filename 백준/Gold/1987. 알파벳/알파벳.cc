@@ -1,57 +1,52 @@
 #include <iostream>
-#include <algorithm>
-
+#include <string>
+#include <vector>
+#include <cmath>
 using namespace std;
 
-int dx[4] = { -1, 1, 0, 0 };
-int dy[4] = { 0, 0, -1, +1 };
+int dx[] = { 0, 1, 0, -1 };
+int dy[] = { -1, 0, 1, 0 };
 
-char board[20][20];
-int alpha[26] = { 0 };
-int r, c;
+vector<string> map;
+int visited[26] = { 0, };
+int r, c, result = 0;
 
-int cnt = 0;
-
-void dfs(int x, int y, int route)
+void solve(int x, int y, int cur)
 {
-    cnt = max(route, cnt);
+	result = max(result, cur);
 
-    for (int i = 0; i < 4; ++i) 
-    {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
+	for (int i = 0; i < 4; i++)
+	{
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if (nx < 0 || nx >= c || ny < 0 || ny >= r) continue;
 
-        if (0 > nx || nx >= r || 0 > ny || ny >= c) continue;
+		char idx = map[ny][nx] - 'A';
+		if (visited[idx]) continue;
 
-        if (!alpha[((int)board[nx][ny]) - 65])
-        {
-            alpha[((int)board[nx][ny]) - 65]++;
-            dfs(nx, ny, route + 1);
-
-            alpha[((int)board[nx][ny]) - 65]--;
-        }
-    }
+		visited[idx] = 1;
+		solve(nx, ny, cur + 1);
+		visited[idx] = 0;
+	}
+	return;
 }
 
-int main() 
+int main()
 {
-    // input & init
-    cin >> r >> c;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 
-    for (int i = 0; i < r; ++i) 
-    {
-        for (int j = 0; j < c; ++j) 
-        {
-            cin >> board[i][j];
-        }
-    }
+	cin >> r >> c;
 
-    alpha[((int)board[0][0]) - 65]++;
+	map.resize(r);
+	for (int i = 0; i < r; i++)
+	{
+		cin >> map[i];
+	}
 
-    // dfs를 활용해 경로탐색
-    dfs(0, 0, 1);
+	visited[map[0][0] - 'A'] = 1;
+	solve(0, 0, 1);
 
-    // output
-    cout << cnt;
-    return 0;
+	cout << result;
+	return 0;
 }
