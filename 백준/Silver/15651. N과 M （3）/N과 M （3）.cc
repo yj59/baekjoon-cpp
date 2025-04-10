@@ -1,37 +1,41 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>
+#include <iostream>
+using namespace std;
 
+int seq[9];
+bool visited[9];
 int n, m;
-int seq[8];
 
-void dfs(int cnt)
+void dfs(int cur, int cnt)
 {
+	
 	if (cnt == m)
 	{
-		for (int i = 0; i < cnt; i++)
+		for (int i = 0; i < m; i++)
 		{
-			printf("%d ", seq[i]);
+			cout << seq[i] << " ";
 		}
-		printf("\n");
+		cout << "\n";
 		return;
 	}
 
-	int dupe = 0;
 	for (int i = 1; i <= n; i++)
 	{
-		if (dupe != i);
-		{
-			seq[cnt] = i;
-			dupe = seq[cnt];
-			dfs(cnt + 1);
-		}
+		seq[cnt] = i;
+
+		visited[i] = 1;
+		dfs(i, cnt + 1);
+		visited[i] = 0;
 	}
+
 }
 
 int main()
 {
-	// init & input
-	scanf("%d %d", &n, &m);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
 
-	dfs(0);
+	cin >> n >> m;
+	dfs(1, 0);
+
+	return 0;
 }
