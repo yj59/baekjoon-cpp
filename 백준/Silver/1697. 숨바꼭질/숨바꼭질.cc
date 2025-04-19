@@ -1,36 +1,49 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <queue>
 using namespace std;
 
-#define MAX 100001
-int N, K, x;
-int cnt[MAX];
-bool ch[MAX];
-queue<int> q;
-int main()
+bool visited[100001];
+queue<pair<int, int>> q;
+
+void enqueue(int node, int time)
 {
-	scanf("%d %d", &N, &K);
-	q.push(N);
-	cnt[N] = 0;
-	ch[N] = true;
+	if (node >= 100001 || node < 0 || visited[node]) return;
+
+	visited[node] = true;
+	q.push({ node, time });
+
+	return;
+}
+
+int bfs(int n, int k)
+{
+	q.push({ n, 0 });
+
 	while (!q.empty())
 	{
-		x = q.front();
+		int x = q.front().first;
+		int t = q.front().second;
+
 		q.pop();
-		for (int i : {x - 1, x + 1, 2 * x})
+
+		if (x == k)
 		{
-			if (i >= 0 && i <= MAX)
-			{
-				if (ch[i] == false)
-				{
-					q.push(i);
-					ch[i] = true;
-					cnt[i] += cnt[x] + 1;
-				}
-			}
+			return t;
 		}
+
+		enqueue(x + 1, t + 1);
+		enqueue(x - 1, t + 1);
+		enqueue(2 * x, t + 1);
 	}
-	printf("%d", cnt[K]);
+
+	return -1;
+}
+
+int main()
+{
+	int n, k;
+	cin >> n >> k;
+
+	cout << bfs(n, k);
 	return 0;
 }
