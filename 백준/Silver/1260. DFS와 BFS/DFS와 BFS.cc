@@ -1,85 +1,87 @@
 #include <iostream>
+#include <cstring>
+#include <algorithm>
 #include <vector>
 #include <queue>
-#include <algorithm>
 using namespace std;
 
-vector<int> v[1001];
-bool dvisited[1001];
-bool bvisited[1001];
+vector<int> graph[1002];
+bool visited[1002];
+
 int n, m, st;
 
-void dfs(int num, int node)
+void input()
 {
-	if (num == n) return;
-
-	for (int i = 0; i < v[node].size(); i++)
+	cin >> n >> m >> st;
+	for (int i = 0; i < m; i++)
 	{
-		int next = v[node][i];
+		int u, v;
+		cin >> u >> v;
+		graph[u].push_back(v);
+		graph[v].push_back(u);
+	}
 
-		if (dvisited[next]) continue;
+	for (int i = 0; i <= n; i++)
+	{
+		sort(graph[i].begin(), graph[i].end());
+	}
+}
 
-		dvisited[next] = 1;
-		cout << next << " ";
+void init()
+{
+	memset(visited, 0, n * sizeof(bool));
+	cout << st << " ";
+}
 
-		dfs(num + 1, next);
+void dfs(int cnt, int node)
+{
+	visited[node] = 1;
+	cout << node << " ";
+
+	if (cnt == n) return;
+
+	for (int i = 0; i < graph[node].size(); i++)
+	{
+		if (visited[graph[node][i]]) continue;
+		dfs(cnt + 1, graph[node][i]);
 	}
 }
 
 void bfs()
 {
-	cout << "\n" << st << " ";
-	bvisited[st] = 1;
-
 	queue<int> q;
+
+	visited[st] = true;
 	q.push(st);
+
+	cout << "\n" << st << " ";
 
 	while (!q.empty())
 	{
 		int node = q.front();
 		q.pop();
 
-		for (int i = 0; i < v[node].size(); i++)
+		for (int i = 0; i < graph[node].size(); i++)
 		{
-			int next = v[node][i];
-			if (bvisited[next]) continue;
+			int next = graph[node][i];
+			if (visited[next]) continue;
 
-			bvisited[next] = 1;
-			cout << next << " ";
-
+			visited[next] = true;
 			q.push(next);
+
+			cout << next << " ";
 		}
 	}
-
 }
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	
-	// input & init
-	cin >> n >> m >> st;
-	
-	for (int i = 0; i < m; i++)
-	{
-		int a, b;
-		cin >> a >> b;
-		v[a].push_back(b);
-		v[b].push_back(a);
-	}
-	
-	for (int i = 1; i <= n; i++)
-	{
-		sort(v[i].begin(), v[i].end());
-	}
 
-	// dfs
-	cout << st << " ";
-	dvisited[st] = 1;
-	dfs(1, st);
-
-	// bfs
+	input();
+	dfs(0, st);
+	memset(visited, 0, sizeof(visited));
 	bfs();
 
 	return 0;
