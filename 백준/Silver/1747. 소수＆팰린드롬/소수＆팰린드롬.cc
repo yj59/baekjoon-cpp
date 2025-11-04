@@ -1,56 +1,69 @@
 #include <iostream>
 #include <vector>
+#include <bitset>
 using namespace std;
 
-bool num[1003002];
+bitset<1003002> num;
 
 void pnum()
 {
 	num[0] = 1;
 	num[1] = 1;
-	for (int i = 2; i <= 1003001; i++)
+	for (int i = 2; 1LL * i * i <= 1003001; i++)
 	{
 		if (num[i]) continue;
-		for (int j = i * 2; j <= 1003001; j += i)
+		for (int j = i * 1LL * i; j <= 1003001; j += i)
 		{
 			num[j] = 1;
 		}
 	}
 }
+inline bool isPal(int n)
+{
+	int num = n;
+	int reverse = 0;
+	while (n)
+	{
+		reverse = reverse * 10 + n % 10;
+		n /= 10;
+	}
+
+	return num == reverse;
+}
+
+int digit(int n)
+{
+	if (n == 0) return 1;
+	int d = 0;
+	while (n > 0)
+	{
+		n /= 10;
+		++d;
+	}
+	return d;
+}
 
 int palindrome(int n)
 {
+	if (n <= 2) return 2;
+	if (n % 2 == 0) n++;
 	while (1)
 	{
-		if (num[n])
+		int d = digit(n);
+		if (d % 2 == 0 && n != 11)
 		{
-			n++;
+			int next = 1;
+			for (int i = 0; i < d; i++)
+			{
+				next *= 10;
+			}
+			n = next + 1;
 			continue;
 		}
-
-		vector<int> v;
-		int oper = n;
-		while (oper)
-		{
-			v.push_back(oper % 10);
-			oper /= 10;
-		}
-
-		bool flag = 1;
-		for (int i = 0; i < (v.size() / 2); i++)
-		{
-			if (v[i] != v[v.size() - 1 - i])
-			{
-				flag = 0;
-				break;
-			}
-		}
-		if (flag)
-		{
-			return n;
-		}
-		n++;
+		if (!num[n] && isPal(n)) return n;
+		n += 2;
 	}
+
 	return -1;
 }
 
