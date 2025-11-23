@@ -1,88 +1,68 @@
 #include <iostream>
-#include <cstring>
-#include <algorithm>
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
-vector<int> graph[1002];
-bool visited[1002];
+vector<int> graph[1001];
+bool dvisited[1001];
+bool bvisited[1001];
 
-int n, m, st;
-
-void input()
+void dfs(int st)
 {
-	cin >> n >> m >> st;
-	for (int i = 0; i < m; i++)
-	{
-		int u, v;
-		cin >> u >> v;
-		graph[u].push_back(v);
-		graph[v].push_back(u);
-	}
-
-	for (int i = 0; i <= n; i++)
-	{
-		sort(graph[i].begin(), graph[i].end());
-	}
-}
-
-void init()
-{
-	memset(visited, 0, n * sizeof(bool));
+	dvisited[st] = true;
 	cout << st << " ";
-}
 
-void dfs(int cnt, int node)
-{
-	visited[node] = 1;
-	cout << node << " ";
-
-	if (cnt == n) return;
-
-	for (int i = 0; i < graph[node].size(); i++)
+	for (int next : graph[st])
 	{
-		if (visited[graph[node][i]]) continue;
-		dfs(cnt + 1, graph[node][i]);
+		if (!dvisited[next]) dfs(next);
 	}
 }
 
-void bfs()
+void bfs(int st)
 {
 	queue<int> q;
-
-	visited[st] = true;
 	q.push(st);
-
-	cout << "\n" << st << " ";
+	bvisited[st] = 1;
 
 	while (!q.empty())
 	{
 		int node = q.front();
+		cout << node << " ";
 		q.pop();
 
-		for (int i = 0; i < graph[node].size(); i++)
+		for (int next : graph[node])
 		{
-			int next = graph[node][i];
-			if (visited[next]) continue;
-
-			visited[next] = true;
-			q.push(next);
-
-			cout << next << " ";
+			if (!bvisited[next])
+			{
+				bvisited[next] = 1;
+				q.push(next);
+			}
 		}
 	}
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL); cout.tie(NULL);
+	int n, m, v;
+	cin >> n >> m >> v;
 
-	input();
-	dfs(0, st);
-	memset(visited, 0, sizeof(visited));
-	bfs();
+	for (int i = 0; i < m; i++)
+	{
+		int el1, el2;
+		cin >> el1 >> el2;
+		graph[el1].push_back(el2);
+		graph[el2].push_back(el1);
+	}
+
+	for (int i = 1; i <= n; i++)
+	{
+		sort(graph[i].begin(), graph[i].end());
+	}
+
+	dfs(v);
+	cout << "\n";
+	bfs(v);
 
 	return 0;
 }
