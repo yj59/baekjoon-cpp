@@ -1,53 +1,48 @@
 #include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
 
-int parent[101];
+vector<int> graph[101];
+bool visited[101];
 
-int Find(int x)
+int bfs(int node)
 {
-	if (x == parent[x])
-	{
-		return x;
-	}
-	else
-	{
-		return parent[x] = Find(parent[x]);
-	}
-}
+	int cnt = 0;
+	queue<int> q;
+	q.push(node);
+	visited[node] = 1;
 
-void Union(int x, int y)
-{
-	x = Find(x);
-	y = Find(y);
-	if (x != y)
+	while (!q.empty())
 	{
-		parent[y] = x;
+		node = q.front();
+		q.pop();
+
+		for (int next : graph[node])
+		{
+			if (visited[next]) continue;
+			cnt++;
+			q.push(next);
+			visited[next] = 1;
+		}
 	}
+
+	return cnt;
 }
 
 int main()
 {
 	int n, m;
 	cin >> n >> m;
-	for (int i = 0; i <= n; i++)
+	for (int i = 0; i < m; i++)
 	{
-		parent[i] = i;
-	}
-	while (m--)
-	{
-		int x, y;
-		cin >> x >> y;
-		Union(x, y);
+		int u, v;
+		cin >> u >> v;
+
+		graph[u].push_back(v);
+		graph[v].push_back(u);
 	}
 
-	int ans = 0;
-	for (int i = 2; i <= n; i++)
-	{
-		if (Find(1) == Find(i))
-		{
-			ans += 1;
-		}
-	}
-	cout << ans << "\n";
+	cout << bfs(1);
 	return 0;
 }
