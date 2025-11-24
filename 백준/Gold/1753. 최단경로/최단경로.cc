@@ -3,62 +3,62 @@
 #include <queue>
 using namespace std;
 
-vector<pair<int, int>> graph[20002];
+vector<pair<int, int>> graph[20001];
+int cost[20001];
 
-vector<int> dijkstra(int n, int st)
+
+void dijkstra(int st)
 {
-	vector<int> dist(n + 1);
-	fill(dist.begin(), dist.end(), 1e9);
-
 	priority_queue<pair<int, int>> pq;
 	pq.push({ 0, st });
-	dist[st] = 0;
+	cost[st] = 0;
 
 	while (!pq.empty())
 	{
-		int cur_cost = -pq.top().first;
-		int cur_node = pq.top().second;
+		int dist = -pq.top().first;
+		int node = pq.top().second;
 		pq.pop();
 
-		if (cur_cost > dist[cur_node]) continue;
+		if (dist > cost[node]) continue;
 
-		for (auto nei : graph[cur_node])
+		for (int i = 0; i < graph[node].size(); i++)
 		{
-			int next_node = nei.first;
-			int next_cost = cur_cost + nei.second;
+			int next = graph[node][i].first;
+			int ndist = graph[node][i].second;
 
-			if (next_cost > dist[next_node]) continue;
+			int cal = dist + ndist;
 
-			dist[next_node] = next_cost;
-			pq.push({ -next_cost, next_node });
+			if (cal < cost[next])
+			{
+				cost[next] = cal;
+				pq.push({ -cal, next });
+			}
+			
 		}
 	}
-
-	return dist;
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL); cout.tie(NULL);
+	int v, e, st;
+	cin >> v >> e >> st;
 
-	int V, E, st;
-	cin >> V >> E >> st;
-
-	for (int i = 0; i < E; i++)
+	for (int i = 0; i < e; i++)
 	{
-		int u, v, w;
-		cin >> u >> v >> w;
-
-		graph[u].push_back({ v, w });
+		int a, b, c;
+		cin >> a >> b >> c;
+		graph[a].push_back({ b, c });	
 	}
 
-	vector<int> ans = dijkstra(V, st);
+	fill(cost, cost + v + 1, 1e9);
 
-	for (int i = 1; i <= V; i++)
+	dijkstra(st);
+
+	for (int i = 1; i <= v; i++)
 	{
-		if (ans[i] == 1e9) cout << "INF\n";
-		else cout << ans[i] << "\n";
+		if (cost[i] == 1e9) cout << "INF\n";
+		else cout << cost[i] << "\n";
 	}
+
 	return 0;
 }
