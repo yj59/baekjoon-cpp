@@ -1,52 +1,51 @@
 #include <iostream>
 #include <string>
-#include <vector>
-#include <cmath>
 using namespace std;
 
 int dx[] = { 0, 1, 0, -1 };
 int dy[] = { -1, 0, 1, 0 };
 
-vector<string> map;
-int visited[26] = { 0, };
-int r, c, result = 0;
+char board[21][21];
+bool visited[26];
+int r, c, ans = 0;
 
-void solve(int x, int y, int cur)
+void solve(int x, int y, int len)
 {
-	result = max(result, cur);
+	ans = max(ans, len);
 
 	for (int i = 0; i < 4; i++)
 	{
 		int nx = x + dx[i];
 		int ny = y + dy[i];
+
 		if (nx < 0 || nx >= c || ny < 0 || ny >= r) continue;
 
-		char idx = map[ny][nx] - 'A';
-		if (visited[idx]) continue;
+		int ctoi = board[ny][nx] - 'A';
+		if (visited[ctoi]) continue;
 
-		visited[idx] = 1;
-		solve(nx, ny, cur + 1);
-		visited[idx] = 0;
+		visited[ctoi] = 1;
+		solve(nx, ny, len + 1);
+		visited[ctoi] = 0;
 	}
-	return;
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-
 	cin >> r >> c;
 
-	map.resize(r);
 	for (int i = 0; i < r; i++)
 	{
-		cin >> map[i];
+		string str;
+		cin >> str;
+		for (int j = 0; j < c; j++)
+		{
+			board[i][j] = str[j];
+		}
 	}
 
-	visited[map[0][0] - 'A'] = 1;
+	visited[board[0][0] - 'A'] = 1;
 	solve(0, 0, 1);
+	cout << ans;
 
-	cout << result;
 	return 0;
 }
