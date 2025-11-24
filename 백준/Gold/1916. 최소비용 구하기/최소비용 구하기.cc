@@ -3,39 +3,37 @@
 #include <queue>
 using namespace std;
 
-const int INF = 1e9;
 vector<pair<int, int>> graph[1001];
+int cost[1001];
 
-int dijkstra(int n, int st, int e)
+void dijkstra(int st)
 {
-	vector<int> dist(n + 1, INF);
 	priority_queue<pair<int, int>> pq;
 
-	dist[st] = 0;
 	pq.push({ 0, st });
+	cost[st] = 0;
 
 	while (!pq.empty())
 	{
-		int cur_cost = -pq.top().first;
-		int cur_node = pq.top().second;
+		int dist = -pq.top().first;
+		int now = pq.top().second;
 		pq.pop();
 
-		if (cur_cost > dist[cur_node]) continue;
+		if (dist > cost[now]) continue;
 
-		for (auto& nei : graph[cur_node])
+		for (int i = 0; i < graph[now].size(); i++)
 		{
-			int next_node = nei.first;
-			int next_cost = nei.second + cur_cost;
+			int ndist = graph[now][i].second;
+			int next = graph[now][i].first;
 
-			if (next_cost < dist[next_node])
+			int cal = ndist + dist;
+			if (cal < cost[next])
 			{
-				dist[next_node] = next_cost;
-				pq.push({ -next_cost, next_node });
+				cost[next] = cal;
+				pq.push({ -cal, next });
 			}
 		}
 	}
-
-	return dist[e];
 }
 
 int main()
@@ -45,17 +43,20 @@ int main()
 
 	int n, m;
 	cin >> n >> m;
-
 	for (int i = 0; i < m; i++)
 	{
 		int u, v, w;
 		cin >> u >> v >> w;
+
 		graph[u].push_back({ v, w });
 	}
+	fill(cost, cost + n + 1, 1e9);
 
 	int st, e;
 	cin >> st >> e;
 
-	cout << dijkstra(n, st, e);
+	dijkstra(st);
+	cout << cost[e];
+
 	return 0;
 }
