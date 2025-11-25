@@ -1,46 +1,27 @@
 #include <iostream>
 #include <string>
-#include <vector>
 using namespace std;
-
-string s, t;
-vector<char> st;
-bool pop;
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	ios::sync_with_stdio(false);
 
-	cin >> s >> t;
+	string str, fire;
+	cin >> str >> fire;
+	string ans;
 
-	for (int i = 0; i < s.size(); i++)
+	for (int i = 0; i < str.size(); i++)
 	{
-		st.push_back(s[i]);
-		if (st.size() >= t.size())
+		ans += str[i];
+		if (ans.size() >= fire.size() && ans.substr(ans.size() - fire.size(), ans.size()) == fire)
 		{
-			pop = true;
-
-			for (int j = 0; j < t.size(); j++)
-			{
-				if (st[st.size() - j - 1] != t[t.size() - j - 1])
-				{
-					pop = false; break;
-				}
-			}
-
-			if (pop)
-			{
-				for (int j = 0; j < t.size(); j++) st.pop_back();
-			}
-			
+			ans.erase(ans.size() - fire.size(), ans.size());
 		}
 	}
 
-	if (st.size() == 0)
-	{
-		cout << "FRULA";
-		return 0;
-	}
-	for (int i = 0; i < st.size(); i++) cout << st[i];
+	if (ans.empty()) cout << "FRULA\n";
+	else cout << ans;
+
+	return 0;
 }
