@@ -10,11 +10,10 @@ queue<pair<int, int>> q;
 
 void bfs(int n, int m)
 {
-	while(!q.empty())
+	while (!q.empty())
 	{
 		int x = q.front().second;
 		int y = q.front().first;
-
 		q.pop();
 
 		for (int i = 0; i < 4; i++)
@@ -22,7 +21,8 @@ void bfs(int n, int m)
 			int nx = x + dx[i];
 			int ny = y + dy[i];
 
-			if (nx < 0 || ny < 0 || nx >= m || ny >= n || box[ny][nx] != 0) continue;
+			if (nx < 0 || nx >= m || ny < 0 || ny >= n) continue;
+			if (box[ny][nx] != 0) continue;
 
 			box[ny][nx] = box[y][x] + 1;
 			q.push({ ny, nx });
@@ -32,10 +32,6 @@ void bfs(int n, int m)
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-
-	// init & input
 	int m, n;
 	cin >> m >> n;
 
@@ -44,13 +40,14 @@ int main()
 		for (int j = 0; j < m; j++)
 		{
 			cin >> box[i][j];
-			if (box[i][j] == 1) q.push({ i, j });
+			if (box[i][j] == 1)
+			{
+				q.push({ i, j });
+			}
 		}
 	}
 
-	//solve
 	bfs(n, m);
-
 	int cnt = 0;
 	for (int i = 0; i < n; i++)
 	{
@@ -66,8 +63,6 @@ int main()
 		}
 	}
 
-	// ouptput
 	cout << cnt - 1;
-
 	return 0;
 }
